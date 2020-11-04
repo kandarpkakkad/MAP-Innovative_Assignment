@@ -7,24 +7,24 @@ app.set("views", "templates");
 
 app.get("/", (req, res, next) => {
     data = {
-        view_api: true,
+        modify_api: true,
         method: "get",
-        port: 4000,
+        port: 5000,
         returns: "json dump",
     };
-    res.render("view", {data: data})
+    res.render("modify", {data: data})
 });
 
 app.post("/", (req, res, next) => {
     data = {
-        view_api: true,
+        modify_api: true,
         method: "post",
-        port: 4000,
+        port: 5000,
         returns: "json dump",
     };
-    res.render("view", {data: data})
+    res.render("modify", {data: data})
 });
 
-app.listen(4000, () => {
-    console.log("View server running on port 4000");
+app.listen(5000, () => {
+    console.log("Modify server running on port 5000");
 });
