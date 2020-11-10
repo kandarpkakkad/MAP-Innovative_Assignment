@@ -37,4 +37,4 @@ $ python3 home_app.py
 
 ## See Output
 
-Go to http:127.0.0.1:6060 
+Go to http://127.0.0.1:6060 
