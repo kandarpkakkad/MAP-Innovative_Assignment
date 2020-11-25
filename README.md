@@ -5,6 +5,7 @@
 ```
 $ pip3 install flask
 $ pip3 install flask-restful
+$ pip3 install gunicorn
 $ npm install
 ```
 
@@ -17,17 +18,17 @@ $ node gateway.js
 
 Terminal 2
 ```
-$ node take.js
+$ python3 take.py
 ```
 
 Terminal 3
 ```
-$ node modify.js
+$ python3 modify.py
 ```
 
 Terminal 4
 ```
-$ node view.js
+$ python3 view.py
 ```
 
 Terminal 5
