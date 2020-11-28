@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 import ast
 import pymysql
 
+
 modify_app = Flask(__name__)
 
 
@@ -15,12 +16,6 @@ def take_get():
         return render_template('modify.html', data={'role': role, 'result': result['name']})
     else:
         return redirect('http://localhost:9000/')
-    # data = dict()
-    # data["modify_api"] = True
-    # data["method"] = "get"
-    # data["port"] = 5000
-    # data["returns"] = "dictionary"
-    # return render_template("modify.html", data=data)
 
 
 @modify_app.route("/", methods=["POST"])
@@ -78,12 +73,6 @@ def take_post():
             return redirect('http://localhost:2222/dashboard/')
     else:
         return redirect('http://localhost:9000/')
-    # data = dict()
-    # data["modify_api"] = True
-    # data["method"] = "post"
-    # data["port"] = 5000
-    # data["returns"] = "dictionary"
-    # return render_template("modify.html", data=data)
 
 
 if __name__ == "__main__":

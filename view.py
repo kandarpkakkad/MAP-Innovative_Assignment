@@ -4,6 +4,8 @@ import os
 import sys
 import datetime
 import ast
+import pymysql
+
 
 view_app = Flask(__name__)
 
@@ -19,7 +21,7 @@ def view_get():
     if 'result' in request.cookies:
         result = request.cookies.get('result')
         result = ast.literal_eval(result)
-        return render_template('home/view_attendance.html', data = {'role': role, 'result': result['name'], 'search_set': at})
+        return render_template('view.html', data = {'role': role, 'result': result['name'], 'search_set': at})
     else:
         return redirect("http://localhost:9000/", code=302)
 
@@ -31,6 +33,8 @@ def take_post():
     rol = ''
     at = []
     sear_sub = ''
+    connection = pymysql.connect(host='localhost', user='root', password='', db='MAP')
+    cursor = connection.cursor()
     role = request.cookies.get('role')
     if 'result' in request.cookies:
         sear_sub = request.form.get('search_sub')
@@ -50,7 +54,8 @@ def take_post():
         stu = cursor.fetchall()
         result = request.cookies.get('result')
         result = ast.literal_eval(result)
-        return render_template('home/view_attendance.html', data={'role': role, 'result': result['name'], 'search_set': stu})
+        print(result)
+        return render_template('view.html', data={'role': role, 'result': result['name'], 'search_set': stu})
     else:
         return redirect("http://localhost:9000/", code=302)
 

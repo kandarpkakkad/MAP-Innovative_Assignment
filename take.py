@@ -5,31 +5,8 @@ import sys
 import datetime
 import ast
 
-take_app = Flask(__name__)
 
-role1 = ''
-role = ''
-result = []
-username = ''
-login = 0
-timetable = {}
-dat = ''
-cname = ''
-lec_type = 0
-subject = ''
-sub = list()
-pern = list()
-perl = list()
-pert = list()
-colorn = list()
-colorl = list()
-colort = list()
-colora = list()
-lec = list()
-tut = list()
-lab = list()
-avg = list()
-all = list()
+take_app = Flask(__name__)
 
 
 @take_app.route("/<lecture>/<class_name>/", methods=["GET"])
@@ -82,6 +59,7 @@ def take_get(lecture, class_name):
             else:
                 result = request.cookies.get('result')
                 result = ast.literal_eval(result)
+                print(result)
                 return render_template('home/take_attendance.html', data={'class': class_name, 'subject': lecture, 'role': request.cookies.get('role')})
         else:
             return redirect("http://localhost:9000/", code=302)
@@ -131,7 +109,7 @@ def take_post(lecture, class_name):
                     for i in stu:
                         stun.append(i[0])
                 # arr = smart_attendance()
-                arr = request.POST.getlist('roll')
+                arr = request.form.getlist('roll')
                 print(arr)
                 for i in stun:
                     query = "INSERT INTO student (`lecture`, `prof_username`, `roll_number`, `lecture_type`, `status`) VALUES ('%s', '%s', '%s', %s, '%s');"
@@ -157,10 +135,10 @@ def take_post(lecture, class_name):
                 stu = cursor.fetchall()
                 # stu = Student.objects.all()
                 stun = []
-                length = len(request.POST['class'])
-                class_name = request.POST['class']
+                length = len(request.form['class'])
+                class_name = request.form['class']
                 print(length)
-                lecture = request.POST['subject']
+                lecture = request.form['subject']
                 print(lecture)
                 if length == 4:
                     sem = class_name[0]
@@ -190,7 +168,7 @@ def take_post(lecture, class_name):
                     stu = cursor.fetchall()
                     for i in stu:
                         stun.append(i[0])
-                arr = request.POST.getlist('roll')
+                arr = request.form.getlist('roll')
                 print(arr)
                 for i in stun:
                     query = "INSERT INTO student (`lecture`, `prof_username`, `roll_number`, `lecture_type`, `status`) VALUES ('%s', '%s', '%s', %s, '%s');"
