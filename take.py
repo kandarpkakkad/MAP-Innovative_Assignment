@@ -3,6 +3,7 @@ import pymysql as sql
 import os
 import sys
 import datetime
+import ast
 
 take_app = Flask(__name__)
 
@@ -39,7 +40,7 @@ def take_get(lecture, class_name):
             cursor = connection.cursor()
             query = "SELECT * FROM student;"
             cursor.execute(query)
-            result = cursor.fetchall()
+            stu = cursor.fetchall()
             # stu = Student.objects.all()
             stun = []
             if lecture != '-' and class_name != '-':
@@ -48,7 +49,7 @@ def take_get(lecture, class_name):
                     sem = class_name[0]
                     branch = class_name[1:length - 1]
                     batch = class_name[length - 1]
-                    find_student_query = "SELECT * FROM student WHERE semester=" + sem + " AND branch='" + branch + "' AND lab_batch='" + batch + "';"
+                    find_student_query = "SELECT * FROM student WHERE semester=" + sem + " AND branch='" + branch + "' AND batch='" + batch + "';"
                     print(find_student_query)
                     cursor.execute(find_student_query)
                     stu = cursor.fetchall()
@@ -71,7 +72,7 @@ def take_get(lecture, class_name):
                     branch = class_name[1:length - 3]
                     cl = class_name[length - 3]
                     batch = class_name[length - 2:]
-                    find_student_query = "SELECT * FROM student WHERE semester=" + sem + " AND branch='" + branch + "' AND lab_batch='" + batch + "';"
+                    find_student_query = "SELECT * FROM student WHERE semester=" + sem + " AND branch='" + branch + "' AND batch='" + cl + "' AND tut_batch='" + batch + "';"
                     print(find_student_query)
                     cursor.execute(find_student_query)
                     stu = cursor.fetchall()
@@ -93,14 +94,141 @@ def take_get(lecture, class_name):
 
 @take_app.route("/<lecture>/<class_name>/", methods=["POST"])
 def take_post(lecture, class_name):
-    data = dict()
-    data["take_api"] = True
-    data["lecture"] = lecture
-    data["class_name"] = class_name
-    data["method"] = "post"
-    data["port"] = 3000
-    data["returns"] = "dictionary"
-    return render_template("take.html", data=data)
+    global role, result, username, login
+    if result in request.cookies:
+        if request.cookies.get('result') != "":
+            connection = sql.connect(host='localhost', user='root', password='', db='MAP')
+            cursor = connection.cursor()
+            query = "SELECT * FROM student;"
+            cursor.execute(query)
+            stu = cursor.fetchall()
+            # stu = Student.objects.all()
+            stun = []
+            if lecture != '-' and class_name != '-':
+                length = len(class_name)
+                if length == 4:
+                    sem = class_name[0]
+                    branch = class_name[1:length - 1]
+                    batch = class_name[length - 1]
+                    find_student_query = "SELECT * FROM student WHERE semester=" + sem + "AND branch-'" + branch + "' AND batch='" + batch + "';"
+                    cursor.execute(find_student_query)
+                    stu = cursor.fetchall()
+                    # stu = Student.objects.filter(semester=sem, branch=branch, batch=batch)
+                    for i in stu:
+                        stun.append(i[0])
+                elif length == 5:
+                    sem = class_name[0]
+                    branch = class_name[1:length - 2]
+                    batch = class_name[length - 2:]
+                    find_student_query = "SELECT * FROM student WHERE semester=" + sem + "AND branch-'" + branch + "' AND lab_batch='" + batch + "';"
+                    cursor.execute(find_student_query)
+                    stu = cursor.fetchall()
+                    # stu = Student.objects.filter(semester=sem, branch=branch, lab_batch=batch)
+                    for i in stu:
+                        stun.append(i[0])
+                elif length == 6:
+                    sem = class_name[0]
+                    branch = class_name[1:length - 3]
+                    cl = class_name[length - 3]
+                    batch = class_name[length - 2:]
+                    find_student_query = "SELECT * FROM student WHERE semester=" + sem + " AND branch='" + branch + "' AND batch='" + cl + "' AND tut_batch='" + batch + "';"
+                    cursor.execute(find_student_query)
+                    stu = cursor.fetchall()
+                    # stu = Student.objects.filter(semester=sem, branch=branch, batch=cl,  tut_batch=batch)
+                    for i in stu:
+                        stun.append(i[0])
+                # arr = smart_attendance()
+                arr = request.POST.getlist('roll')
+                print(arr)
+                for i in stun:
+                    query = "INSERT INTO student (`lecture`, `prof_username`, `roll_number`, `lecture_type`, `status`) VALUES ('%s', '%s', '%s', %s, '%s');"
+                    prof_username = ast.literal_eval(request.cookies.get('result'))['name']
+                    roll_number = i
+                    if len(class_name) == 4:
+                        lecture_type = 0
+                    elif len(class_name) == 5:
+                        lecture_type = 1
+                    elif len(class_name) == 6:
+                        lecture_type = 2
+                    else:
+                        lecture_type = 3
+                    if i in arr:
+                        status = 'P'
+                    else:
+                        status = 'A'
+                    cursor.execute(query, (lecture, prof_username, roll_number, lecture_type, status))
+                return redirect('http://localhost:2222/dashboard/')
+            else:
+                query = "SELECT * FROM student;"
+                cursor.execute(query)
+                stu = cursor.fetchall()
+                # stu = Student.objects.all()
+                stun = []
+                length = len(request.POST['class'])
+                class_name = request.POST['class']
+                print(length)
+                lecture = request.POST['subject']
+                print(lecture)
+                if length == 4:
+                    sem = class_name[0]
+                    branch = class_name[1:length - 1]
+                    batch = class_name[length - 1]
+                    query = "SELECT * FROM student WHERE semester=" + sem + " AND branch='" + branch + "' AND batch='" + batch + "'" + "';"
+                    cursor.execute(query)
+                    stu = cursor.fetchall()
+                    for i in stu:
+                        stun.append(i[0])
+                elif length == 5:
+                    sem = class_name[0]
+                    branch = class_name[1:length - 2]
+                    batch = class_name[length - 2:]
+                    query = "SELECT * FROM student WHERE semester=" + sem + " AND branch='" + branch + "' AND lab_batch='" + batch + "'" + "';"
+                    cursor.execute(query)
+                    stu = cursor.fetchall()
+                    for i in stu:
+                        stun.append(i[0])
+                elif length == 6:
+                    sem = class_name[0]
+                    branch = class_name[1:length - 3]
+                    cl = class_name[length - 3]
+                    batch = class_name[length - 2:]
+                    query = "SELECT * FROM student WHERE semester=" + sem + " AND branch='" + branch + "' AND batch='" + cl + "' AND tut_batch='" + batch + "'" + "';"
+                    cursor.execute(query)
+                    stu = cursor.fetchall()
+                    for i in stu:
+                        stun.append(i[0])
+                arr = request.POST.getlist('roll')
+                print(arr)
+                for i in stun:
+                    query = "INSERT INTO student (`lecture`, `prof_username`, `roll_number`, `lecture_type`, `status`) VALUES ('%s', '%s', '%s', %s, '%s');"
+                    prof_username = ast.literal_eval(request.cookies.get('result'))['name']
+                    roll_number = i
+                    if len(class_name) == 4:
+                        lecture_type = 0
+                    elif len(class_name) == 5:
+                        lecture_type = 1
+                    elif len(class_name) == 6:
+                        lecture_type = 2
+                    else:
+                        lecture_type = 3
+                    if i in arr:
+                        status = 'P'
+                    else:
+                        status = 'A'
+                    cursor.execute(query, (lecture, prof_username, roll_number, lecture_type, status))
+                return redirect('http://localhost:2222/dashboard/')
+        else:
+            return redirect('http://localhost:9000/')
+    else:
+        return redirect('http://localhost:9000/')
+    # data = dict()
+    # data["take_api"] = True
+    # data["lecture"] = lecture
+    # data["class_name"] = class_name
+    # data["method"] = "post"
+    # data["port"] = 3000
+    # data["returns"] = "dictionary"
+    # return render_template("take.html", data=data)
 
 
 if __name__ == "__main__":
