@@ -41,7 +41,6 @@ def take_get(lecture, class_name):
             query = "SELECT * FROM student;"
             cursor.execute(query)
             stu = cursor.fetchall()
-            # stu = Student.objects.all()
             stun = []
             if lecture != '-' and class_name != '-':
                 length = len(class_name)
@@ -53,7 +52,6 @@ def take_get(lecture, class_name):
                     print(find_student_query)
                     cursor.execute(find_student_query)
                     stu = cursor.fetchall()
-                    # stu = Student.objects.filter(semester=sem, branch=branch, batch=batch)
                     for i in stu:
                         stun.append(i[0])
                 elif length == 5:
@@ -64,7 +62,6 @@ def take_get(lecture, class_name):
                     print(find_student_query)
                     cursor.execute(find_student_query)
                     stu = cursor.fetchall()
-                    # stu = Student.objects.filter(semester=sem, branch=branch, batch=batch)
                     for i in stu:
                         stun.append(i[0])
                 elif length == 6:
@@ -76,15 +73,15 @@ def take_get(lecture, class_name):
                     print(find_student_query)
                     cursor.execute(find_student_query)
                     stu = cursor.fetchall()
-                    # stu = Student.objects.filter(semester=sem, branch=branch, batch=batch)
                     for i in stu:
                         stun.append(i[0])
                 result = request.cookies.get('result')
                 print(result)
-                # result = ast.literal_eval(result)
+                result = ast.literal_eval(result)
                 return render_template('take.html', data=result)
             else:
                 result = request.cookies.get('result')
+                result = ast.literal_eval(result)
                 return render_template('home/take_attendance.html', data={'class': class_name, 'subject': lecture, 'role': request.cookies.get('role')})
         else:
             return redirect("http://localhost:9000/", code=302)
@@ -102,7 +99,6 @@ def take_post(lecture, class_name):
             query = "SELECT * FROM student;"
             cursor.execute(query)
             stu = cursor.fetchall()
-            # stu = Student.objects.all()
             stun = []
             if lecture != '-' and class_name != '-':
                 length = len(class_name)
@@ -113,7 +109,6 @@ def take_post(lecture, class_name):
                     find_student_query = "SELECT * FROM student WHERE semester=" + sem + "AND branch-'" + branch + "' AND batch='" + batch + "';"
                     cursor.execute(find_student_query)
                     stu = cursor.fetchall()
-                    # stu = Student.objects.filter(semester=sem, branch=branch, batch=batch)
                     for i in stu:
                         stun.append(i[0])
                 elif length == 5:
@@ -123,7 +118,6 @@ def take_post(lecture, class_name):
                     find_student_query = "SELECT * FROM student WHERE semester=" + sem + "AND branch-'" + branch + "' AND lab_batch='" + batch + "';"
                     cursor.execute(find_student_query)
                     stu = cursor.fetchall()
-                    # stu = Student.objects.filter(semester=sem, branch=branch, lab_batch=batch)
                     for i in stu:
                         stun.append(i[0])
                 elif length == 6:
@@ -134,7 +128,6 @@ def take_post(lecture, class_name):
                     find_student_query = "SELECT * FROM student WHERE semester=" + sem + " AND branch='" + branch + "' AND batch='" + cl + "' AND tut_batch='" + batch + "';"
                     cursor.execute(find_student_query)
                     stu = cursor.fetchall()
-                    # stu = Student.objects.filter(semester=sem, branch=branch, batch=cl,  tut_batch=batch)
                     for i in stu:
                         stun.append(i[0])
                 # arr = smart_attendance()
@@ -221,14 +214,6 @@ def take_post(lecture, class_name):
             return redirect('http://localhost:9000/')
     else:
         return redirect('http://localhost:9000/')
-    # data = dict()
-    # data["take_api"] = True
-    # data["lecture"] = lecture
-    # data["class_name"] = class_name
-    # data["method"] = "post"
-    # data["port"] = 3000
-    # data["returns"] = "dictionary"
-    # return render_template("take.html", data=data)
 
 
 if __name__ == "__main__":
