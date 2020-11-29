@@ -1,11 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-    <a href="http://localhost:2222/dashboard/">Dashboard</a>
-</body>
+<html>
+	<head>
+		<link rel="shortcut icon" href="../static/icon/staff.svg">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="../static/css/style_login.css">
+		<title>Login</title>
+	</head>
+	<body>
+
+		<header>
+			
+		</header>
+
+		<div class="align">
+			<div class="card" style="width: 475px;">
+				<div class="head">
+					<div></div>
+					<a id="login" class="selected" href="#login">Login</a>
+					<div></div>
+				</div>
+				<div class="tabs">
+					<form method="post" action="http://localhost:2222/dashboard/">
+						<div class="inputs">
+							<div class="input">
+								<input type="radio" name="role" value="professor" checked />Professor
+								<input type="radio" name="role" value="student" /> Student
+							</div>
+							<div class="input">
+								<input placeholder="Username" type="text" name="username" required />
+								<img src="../static/img/user.svg">
+							</div>
+							<div class="input">
+								<input placeholder="Password" type="password" name="password" required />
+								<img src="../static/img/pass.svg">
+							</div>
+						</div>
+						<button name='login'>Login</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<script src="static/js/jquery-3.3.1.min.js"></script>
+		<script src="static/js/index.js"></script>
+	</body>
 </html>
