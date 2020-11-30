@@ -3,12 +3,11 @@
 ## Install Dependencies
 
 ```
-$ pip3 install flask
-$ pip3 install flask-restful
-$ pip3 install gunicorn
-$ pip3 install pymysql
+$ pip3 install -r requirements.txt
 $ npm install
 ```
+
+Start XAMPP server and create a MySQL Database named "MAP" and import the "map.sql" file in it.
 
 ## Run API Gateway
 
