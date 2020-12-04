@@ -9,7 +9,7 @@ $ npm install
 
 Start XAMPP server and create a MySQL Database named "MAP" and import the "map.sql" file in it.
 
-## Run API Gateway
+## Run Application
 
 Terminal 1
 ```
