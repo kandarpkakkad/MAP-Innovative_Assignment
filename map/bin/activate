@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/kandarp/Downloads/Git/MAP-Innovative_Assignment/map"
+VIRTUAL_ENV="/home/kandarp/Downloads/MAP-Innovative_Assignment/map"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

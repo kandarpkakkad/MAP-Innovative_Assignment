@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/kandarp/Downloads/Git/MAP-Innovative_Assignment/map"
+set -gx VIRTUAL_ENV "/home/kandarp/Downloads/MAP-Innovative_Assignment/map"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
