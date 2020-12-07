@@ -58,7 +58,7 @@ def take_get(lecture, class_name):
                 print(roll_number)
                 # result = ast.literal_eval(result)
                 cursor.close()
-                return render_template('take.html', data=result)
+                return render_template('take.html', data={'result': result, 'roll_number': roll_number, "subject": lecture, 'class': class_name, 'students': stun, 'role': request.cookies.get('role')})
             else:
                 result = request.cookies.get('result')
                 print(result)

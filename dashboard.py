@@ -35,6 +35,24 @@ connection = pymysql.connect(host='localhost', user='root', password='', db='MAP
 cursor = connection.cursor()
 
 
+@home_app.template_filter('zip')
+def zip_lists(a, b):
+    return zip(a[0], a[1], b)
+
+
+@home_app.template_filter('join_lists')
+def join_lists(a, b):
+    x = list()
+    x.append(a)
+    x.append(b)
+    return x
+
+
+@home_app.template_filter('to_str')
+def to_str(value):
+    return str(value)
+
+
 def index(array, key):
     if key in array:
         return array.index(key)
@@ -303,6 +321,7 @@ def home_get():
         result = request.cookies.get('result')
         role = request.cookies.get('role')
         timetable = request.cookies.get('tt')
+        timetable = ast.literal_eval(timetable)
         response = make_response(render_template('dashboard.html', data={'tt': timetable, 'result': result, 'role': role}))
         return response
         # else:
@@ -404,6 +423,7 @@ def home():
         # result = Student.objects.filter(username=username, password=password)
         if len(result):
             dict = calculate_attendance(username)
+            print(dict)
             x = ""
             y = ""
             for r in result:
@@ -411,7 +431,7 @@ def home():
                 y = r[0]
             res = x
             roll_number = y
-            response = make_response(render_template('dashboard.html', data={'percentagea': avg, 'subsa':all, 'subst': tut, 'subsl':lab , 'subsn': lec, 'percentagen': pern, 'percentagel': perl, 'percentaget': pert, 'result': x, 'role': role, 'clrn': colorn, 'clrl': colorl,'clrt': colort,'clra': colora}))
+            response = make_response(render_template('dashboard.html', data={'percentagea': dict['percentagea'], 'subsa': dict['subsa'], 'subst': dict["subst"], 'subsl': dict['subsl'] , 'subsn': dict['subsn'], 'percentagen': dict['percentagen'], 'percentagel': dict['percentagel'], 'percentaget': dict['percentaget'], 'result': res, 'role': role, 'clrn': dict['clrn'], 'clrl': dict['clrl'],'clrt': dict['clrt'],'clra': dict['clra'], 'roll_number': roll_number}))
             response.set_cookie('username', str(username), max_age=86400 * 2)
             response.set_cookie('result', str(res), max_age=86400 * 2)
             response.set_cookie('role', str(role), max_age=86400 * 2)

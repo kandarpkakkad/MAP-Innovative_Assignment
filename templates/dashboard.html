@@ -47,6 +47,60 @@
 		<div class="section">
 			<div class="section_heading">
 				<h1>Dashboard</h1>
+				{% if data.role == 'professor' %}
+				<table class="timetable">
+					{% for i in data.tt.name %}
+					<tr>
+						<th>{{ i }}</th>
+						{% if i == '' %}
+							{% for j in data.tt.time %}
+								<th>{{ j }}</th>
+							{% endfor %}
+						{% else %}
+							{% if i == 'mon' %}
+							{% for a,b,c in data.tt.cols.0 | join_lists(data.tt.subject.0) | zip(data.tt.classes.0) %}
+									<td colspan="{{ a }}"><a href="http://localhost:2000/take/{{b}}/{{c}}/">{{ b }}<br>{{ c }}</a></td>
+							{% endfor %}
+							{% elif i == 'tue' %}
+							{% for a,b,c in data.tt.cols.1 | join_lists(data.tt.subject.1) | zip(data.tt.classes.1) %}
+									<td colspan="{{ a }}"><a href="http://localhost:2000/take/{{b}}/{{c}}/">{{ b }}<br>{{ c }}</a></td>
+							{% endfor %}
+							{% elif i == 'wed' %}
+							{% for a,b,c in data.tt.cols.2 | join_lists(data.tt.subject.2) | zip(data.tt.classes.2) %}
+									<td colspan="{{ a }}"><a href="http://localhost:2000/take/{{b}}/{{c}}/">{{ b }}<br>{{ c }}</a></td>
+							{% endfor %}
+							{% elif i == 'thu' %}
+							{% for a,b,c in data.tt.cols.3 | join_lists(data.tt.subject.3) | zip(data.tt.classes.3) %}
+									<td colspan="{{ a }}"><a href="http://localhost:2000/take/{{b}}/{{c}}/">{{ b }}<br>{{ c }}</a></td>
+							{% endfor %}
+							{% elif i == 'fri' %}
+							{% for a,b,c in data.tt.cols.4 | join_lists(data.tt.subject.4) | zip(data.tt.classes.4) %}
+									<td colspan="{{ a }}"><a href="http://localhost:2000/take/{{b}}/{{c}}/">{{ b }}<br>{{ c }}</a></td>
+							{% endfor %}
+							{% elif i == 'sat' %}
+							{% for a,b,c in data.tt.cols.5 | join_lists(data.tt.subject.5) | zip(data.tt.classes.5) %}
+									<td colspan="{{ a }}"><a href="http://localhost:2000/take/{{b}}/{{c}}/">{{ b }}<br>{{ c }}</a></td>
+							{% endfor %}
+							{% endif %}
+						{% endif %}
+					</tr>
+					{% endfor %}
+				</table>
+				{% endif %}
+				{% if data.role == 'student' %}
+				<div class="container" style="width: 550px; float: left;">
+					<canvas id="chart1"></canvas>
+				</div>
+				<div class="container" style="width: 550px; float: left;">
+					<canvas id="chart2"></canvas>
+				</div>
+				<div class="container" style="width: 550px; float: left;">
+					<canvas id="chart3"></canvas>
+				</div>
+				<div class="container" style="width: 550px; float: left;">
+					<canvas id="chart4"></canvas>
+				</div>
+				{% endif %}
 			</div>
 		</div>
 	</div>
@@ -70,39 +124,39 @@
 	<script>
 	var color = Chart.helpers.color;
 	var barChartData1 = {
-		labels: [{% for i in subsn %}'{{ i }}',{% endfor %}],
+		labels: [{% for i in data.subsn %}'{{ i }}',{% endfor %}],
 		datasets: [{
-			backgroundColor: [{% for i in clrn %}'{{ i }}',{% endfor %}],
-			borderColor: [{% for i in clrn %}'{{ i }}',{% endfor %}],
+			backgroundColor: [{% for i in data.clrn %}'{{ i }}',{% endfor %}],
+			borderColor: [{% for i in data.clrn %}'{{ i }}',{% endfor %}],
 			borderWidth: 1,
-			data: [{% for i in percentagen %}{{ i }},{% endfor %}]
+			data: [{% for i in data.percentagen %}{{ i }},{% endfor %}]
 		}]
 	};
 	var barChartData2 = {
-		labels: [{% for i in subsl %}'{{ i }}',{% endfor %}],
+		labels: [{% for i in data.subsl %}'{{ i }}',{% endfor %}],
 		datasets: [{
-			backgroundColor: [{% for i in clrl %}'{{ i }}',{% endfor %}],
-			borderColor: [{% for i in clrl %}'{{ i }}',{% endfor %}],
+			backgroundColor: [{% for i in data.clrl %}'{{ i }}',{% endfor %}],
+			borderColor: [{% for i in data.clrl %}'{{ i }}',{% endfor %}],
 			borderWidth: 1,
-			data: [{% for i in percentagel %}{{ i }},{% endfor %}]
+			data: [{% for i in data.percentagel %}{{ i }},{% endfor %}]
 		}]
 	};
 	var barChartData3 = {
-		labels: [{% for i in subst %}'{{ i }}',{% endfor %}],
+		labels: [{% for i in data.subst %}'{{ i }}',{% endfor %}],
 		datasets: [{
-			backgroundColor: [{% for i in clrt %}'{{ i }}',{% endfor %}],
-			borderColor: [{% for i in clrt %}'{{ i }}',{% endfor %}],
+			backgroundColor: [{% for i in data.clrt %}'{{ i }}',{% endfor %}],
+			borderColor: [{% for i in data.clrt %}'{{ i }}',{% endfor %}],
 			borderWidth: 1,
-			data: [{% for i in percentaget %}{{ i }},{% endfor %}]
+			data: [{% for i in data.percentaget %}{{ i }},{% endfor %}]
 		}]
 	};
 	var barChartData4 = {
-		labels: [{% for i in subsa %}'{{ i }}',{% endfor %}],
+		labels: [{% for i in data.subsa %}'{{ i }}',{% endfor %}],
 		datasets: [{
-			backgroundColor: [{% for i in clra %}'{{ i }}',{% endfor %}],
-			borderColor: [{% for i in clra %}'{{ i }}',{% endfor %}],
+			backgroundColor: [{% for i in data.clra %}'{{ i }}',{% endfor %}],
+			borderColor: [{% for i in data.clra %}'{{ i }}',{% endfor %}],
 			borderWidth: 1,
-			data: [{% for i in percentagea %}{{ i }},{% endfor %}]
+			data: [{% for i in data.percentagea %}{{ i }},{% endfor %}]
 		}]
 	};
 
